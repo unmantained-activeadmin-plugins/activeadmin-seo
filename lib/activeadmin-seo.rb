@@ -1,4 +1,1 @@
-require "activeadmin-seo/engine"
-
-module ActiveadminSeo
-end
+require 'active_admin/seo'

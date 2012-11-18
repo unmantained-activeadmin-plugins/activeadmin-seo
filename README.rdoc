@@ -1,3 +1,41 @@
-= ActiveadminSeo
+= Active Admin Seo
 
-This project rocks and uses MIT-LICENSE.
+Add SEO meta tags for your ActiveAdmin resources.
+
+
+== Installation
+
+Gemfile:
+
+  gem 'activeadmin-seo', github: 'nebirhos/activeadmin-seo'
+
+Install and migrate:
+
+  rake activeadmin_gallery:install:migrations
+  rake db:migrate
+
+
+== Usage
+
+app/models/page.rb:
+
+  class Page < ActiveRecord::Base
+    has_seo
+  end
+
+
+app/admin/page.rb:
+
+  ActiveAdmin.register Page do
+    form do |f|
+      # ...
+      f.inputs :seo
+      # ...
+    end
+  end
+
+
+== Copyright
+
+Copyright (c) 2012 Francesco Disperati, Cantiere Creativo
+See the file MIT-LICENSE for details.

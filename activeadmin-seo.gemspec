@@ -1,12 +1,13 @@
 $:.push File.expand_path("../lib", __FILE__)
 
 # Maintain your gem's version:
-require "activeadmin-seo/version"
+require "active_admin/seo/version"
+# require File.expand_path('../lib/active_admin/seo/version', __FILE__)
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
   s.name        = "activeadmin-seo"
-  s.version     = ActiveadminSeo::VERSION
+  s.version     = ActiveAdmin::Seo::VERSION
   s.authors     = ["Francesco Disperati"]
   s.email       = ["nebirhos@aol.com"]
   s.homepage    = "TODO"
@@ -15,8 +16,5 @@ Gem::Specification.new do |s|
 
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
 
-  s.add_dependency "rails", "~> 3.2.9"
-  # s.add_dependency "jquery-rails"
-
-  s.add_development_dependency "sqlite3"
+  s.add_dependency "activeadmin", "~> 0.5.0"
 end
