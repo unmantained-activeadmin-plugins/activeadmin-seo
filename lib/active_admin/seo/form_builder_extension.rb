@@ -6,6 +6,10 @@ module ActiveAdmin::Seo::FormBuilderExtension
       form.inputs I18n.t('active_admin.seo_meta.name') do
         form.input :description
         form.input :keywords
+        form.input :og_title
+        form.input :og_type
+        form.input :og_url
+        form.input :og_image, :as => :dragonfly, :input_html => { :components => [:preview, :upload, :url, :remove ] }
       end
       form.form_buffers.last
     end
