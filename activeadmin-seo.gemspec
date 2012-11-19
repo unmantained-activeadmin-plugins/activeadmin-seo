@@ -9,9 +9,9 @@ Gem::Specification.new do |s|
   s.version     = ActiveAdmin::Seo::VERSION
   s.authors     = ["Francesco Disperati"]
   s.email       = ["nebirhos@aol.com"]
-  s.homepage    = "TODO"
-  s.summary     = "TODO: Summary of ActiveadminSeo."
-  s.description = "TODO: Description of ActiveadminSeo."
+  s.homepage    = "https://github.com/nebirhos/activeadmin-seo"
+  s.summary     = "SEO meta fields for ActiveAdmin resources."
+  # s.description = "TODO: Description of ActiveadminSeo."
 
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
 
