@@ -20,7 +20,7 @@ Install and migrate:
 app/models/page.rb:
 
   class Page < ActiveRecord::Base
-    has_seo
+    has_seo_meta
   end
 
 
@@ -29,8 +29,20 @@ app/admin/page.rb:
   ActiveAdmin.register Page do
     form do |f|
       # ...
-      f.inputs :seo
+      f.seo_meta
       # ...
+    end
+  end
+
+
+== Globalize3
+
+Now you can use it with `activeadmin-globalize3`!
+Just put the directive in the active_admin_translates block:
+
+  class Page < ActiveRecord::Base
+    active_admin_translates :title, :body do
+      has_seo_meta
     end
   end
 
