@@ -1,7 +1,7 @@
 class ActiveAdmin::Seo::Meta < ActiveRecord::Base
   self.table_name = "active_admin_seo_meta"
   belongs_to :seoable, :polymorphic => true
-  attr_accessible :description, :keywords,
+  attr_accessible :slug, :description, :keywords,
                   :og_title, :og_type, :og_url
 
   image_accessor :og_image

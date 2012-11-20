@@ -3,6 +3,7 @@ module ActiveAdmin::Seo::FormBuilderExtension
 
   def seo_meta
     seo_meta_inputs = lambda do |form|
+      form.input :slug, :input_html => {:disabled => true}
       form.input :description
       form.input :keywords
       form.input :og_title
