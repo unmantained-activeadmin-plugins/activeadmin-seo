@@ -24,6 +24,7 @@ module ActiveAdmin::Seo::FormBuilderExtension
           form.input :og_url
           form.input :og_image, :as => :dragonfly, :input_html => { :components => [:preview, :upload, :url, :remove ] }
         end
+        form.form_buffers.last
       end
       form.form_buffers.last
     end
