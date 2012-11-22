@@ -2,6 +2,7 @@ class CreateActiveAdminSeoMeta < ActiveRecord::Migration
   def change
     create_table :active_admin_seo_meta do |t|
       t.string :slug
+      t.string :title
       t.string :description
       t.string :keywords
       t.string :og_title

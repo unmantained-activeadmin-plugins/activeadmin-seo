@@ -1,7 +1,6 @@
 = Active Admin Seo
 
-Add SEO meta fields to your ActiveAdmin resources.
-
+Add friendly_id and SEO meta fields to your ActiveAdmin resources.
 
 == Installation
 
@@ -14,40 +13,64 @@ Install and migrate:
   rake activeadmin_seo:install:migrations
   rake db:migrate
 
-
 == Usage
 
 app/models/page.rb:
 
   class Page < ActiveRecord::Base
-    has_seo_meta
+    attr_accessible :title, :content
+    has_seo_meta :title
   end
-
 
 app/admin/page.rb:
 
   ActiveAdmin.register Page do
     form do |f|
       # ...
-      f.seo_meta
+      f.seo_meta_inputs
       # ...
     end
   end
 
+== Default seo_meta_input options
+
+  {
+    slug_url_prefix: nil,
+    open_graph_metas: false,
+    basic_metas: false
+  }
+
+== Available Helpers
+
+  <%= head_metas(@page.seo_meta, default_title: page.title) %>
 
 == Globalize3
 
 You can use it with activeadmin-globalize3, just put the directive in
 the active_admin_translates block:
 
+app/models/page.rb:
+
   class Page < ActiveRecord::Base
-    active_admin_translates :title, :body do
-      has_seo_meta
+    active_admin_translates :title, :content do
+      has_seo_meta :title
     end
   end
 
-Remember to uncomment the translations table in the installed migration!
+app/admin/page.rb:
 
+  ActiveAdmin.register Page do
+    form do |f|
+      # ...
+      f.translated_inputs do |t|
+        t.input :title
+        t.input :content
+        # ...
+        f.seo_meta_inputs
+      end
+      # ...
+    end
+  end
 
 == Copyright
 
