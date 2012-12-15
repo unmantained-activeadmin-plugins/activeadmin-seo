@@ -13,22 +13,45 @@ module ActiveAdmin::Seo::FormBuilderExtension
     content = semantic_fields_for :seo_meta do |form|
       form.inputs I18n.t('active_admin.seo_meta.name') do
         form.input :slug, as: :slug, input_html: { url_prefix: options[:slug_url_prefix] }
-        if options[:basic_metas]
-          form.input :title
-          form.input :description
-          form.input :keywords
+        if basic_metas_options(options)
+          form.input :title       if options[:basic_metas][:title]
+          form.input :description if options[:basic_metas][:description]
+          form.input :keywords    if options[:basic_metas][:keywords]
         end
-        if options[:open_graph_metas]
-          form.input :og_title
-          form.input :og_type
-          form.input :og_url
-          form.input :og_image, :as => :dragonfly, :input_html => { :components => [:preview, :upload, :url, :remove ] }
+        if open_graph_options(options)
+          form.input :og_title if options[:open_graph_metas][:title]
+          form.input :og_type  if options[:open_graph_metas][:type]
+          form.input :og_url   if options[:open_graph_metas][:url]
+          form.input :og_image, :as => :dragonfly, :input_html => { :components => [:preview, :upload, :url, :remove ] } if options[:open_graph_metas][:image]
         end
         form.form_buffers.last
       end
       form.form_buffers.last
     end
     form_buffers.last << content
+  end
+
+  private
+
+  def basic_metas_options(options)
+    normalize_options(options, :basic_metas, %w(title description keywords))
+  end
+
+  def open_graph_options(options)
+    normalize_options(options, :open_graph_metas, %w(title type url image))
+  end
+
+  def normalize_options(options, key, fields)
+    if options[key] == true
+      options[key] = {}
+      fields.each { |field| options[key][field.to_sym] = true }
+    elsif options[key].is_a? Array
+      fields = options[key]
+      options[key] = {}
+      fields.each { |field| options[key][field.to_sym] = true }
+    elsif options[key].is_a? Hash
+      true
+    end
   end
 
 end
