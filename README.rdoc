@@ -32,15 +32,34 @@ app/admin/page.rb:
     end
   end
 
-== Default seo_meta_input options
+== seo_meta_inputs options
 
-  {
-    slug_url_prefix: nil,
-    open_graph_metas: false,
-    basic_metas: false
-  }
+  # Default options
+  f.seo_meta_inputs slug_url_prefix: nil, open_graph_metas: false, basic_metas: false
+
+  # Include *all* basic metas fields and *all* open graph metas fields
+  f.seo_meta_inputs :basic_metas => true, :open_graph_metas => true
+
+  # Include only basic metas title/description fields
+  # and open graph meta title/image fields
+  f.seo_meta_inputs basic_metas: [:title, :description],
+                    open_graph_metas: [:title, :image]
+
+  f.seo_meta_inputs basic_metas: ['title', 'description'],
+                    open_graph_metas: ['title', 'image']
+
+  f.seo_meta_inputs basic_metas: {
+                      title: true,
+                      description: true
+                    },
+                    open_graph_metas: {
+                      title: true,
+                      image: true
+                    }
 
 == Available Helpers
+
+Still to come :)
 
   <%= head_metas(@page.seo_meta, default_title: page.title) %>
 
