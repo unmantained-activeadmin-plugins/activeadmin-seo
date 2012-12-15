@@ -38,8 +38,9 @@ app/admin/page.rb:
   # Default options
   f.seo_meta_inputs slug_url_prefix: nil, open_graph_metas: false, basic_metas: false
 
-  # Include *all* basic metas fields and *all* open graph metas fields
-  f.seo_meta_inputs :basic_metas => true, :open_graph_metas => true
+  # Include *all* basic metas fields (title/description/keywords)
+  # and *all* open graph metas fields (title/type/url/image)
+  f.seo_meta_inputs basic_metas: true, open_graph_metas: true
 
   # Include only basic metas title/description fields
   # and open graph meta title/image fields
