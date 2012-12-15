@@ -7,6 +7,7 @@ Add friendly_id and SEO meta fields to your ActiveAdmin resources.
 Gemfile:
 
   gem 'activeadmin-seo', github: 'nebirhos/activeadmin-seo'
+  gem "activeadmin-dragonfly", github: "stefanoverna/activeadmin-dragonfly"
 
 Install and migrate:
 
