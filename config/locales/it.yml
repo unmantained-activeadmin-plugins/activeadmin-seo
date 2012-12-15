@@ -2,3 +2,8 @@ it:
   active_admin:
     seo_meta:
       name: "Attributi Meta SEO"
+
+  activerecord:
+    attributes:
+      active_admin/seo/meta:
+        slug: Permalink
