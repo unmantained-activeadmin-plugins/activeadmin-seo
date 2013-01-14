@@ -11,6 +11,7 @@ Gem::Specification.new do |s|
   s.email       = ["nebirhos@aol.com"]
   s.homepage    = "https://github.com/nebirhos/activeadmin-seo"
   s.summary     = "SEO meta fields for ActiveAdmin resources."
+  s.require_paths = ['lib']
   # s.description = "TODO: Description of ActiveadminSeo."
 
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
