@@ -5,14 +5,17 @@ module ActiveAdmin::Seo::FormBuilderExtension
     options.symbolize_keys!.reverse_merge(
       open_graph_metas: false,
       basic_metas: false,
-      slug_url_prefix: nil
+      slug_url_prefix: nil,
+      slug: true
     )
 
     object.build_seo_meta unless object.seo_meta.present?
 
     content = semantic_fields_for :seo_meta do |form|
       form.inputs I18n.t('active_admin.seo_meta.name') do
-        form.input :slug, as: :slug, input_html: { url_prefix: options[:slug_url_prefix] }
+        if options[:slug]
+          form.input :slug, as: :slug, input_html: { url_prefix: options[:slug_url_prefix] }
+        end
         if basic_metas_options(options)
           form.input :title       if options[:basic_metas][:title]
           form.input :description if options[:basic_metas][:description]
