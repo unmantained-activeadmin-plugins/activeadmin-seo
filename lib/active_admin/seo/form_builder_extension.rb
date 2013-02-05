@@ -24,6 +24,7 @@ module ActiveAdmin::Seo::FormBuilderExtension
         if open_graph_options(options)
           form.input :og_title if options[:open_graph_metas][:title]
           form.input :og_description if options[:open_graph_metas][:description]
+          form.input :og_site_name if options[:open_graph_metas][:site_name]
           form.input :og_type  if options[:open_graph_metas][:type]
           form.input :og_url   if options[:open_graph_metas][:url]
           form.input :og_image, :as => :dragonfly, :input_html => { :components => [:preview, :upload, :url, :remove ] } if options[:open_graph_metas][:image]
@@ -42,7 +43,7 @@ module ActiveAdmin::Seo::FormBuilderExtension
   end
 
   def open_graph_options(options)
-    normalize_options(options, :open_graph_metas, %w(title description type url image))
+    normalize_options(options, :open_graph_metas, %w(title description site_name type url image))
   end
 
   def normalize_options(options, key, fields)
