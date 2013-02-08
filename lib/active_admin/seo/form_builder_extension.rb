@@ -2,7 +2,8 @@ module ActiveAdmin::Seo::FormBuilderExtension
   include ActiveAdmin::Seo
 
   def seo_meta_inputs(options = {})
-    options.symbolize_keys!.reverse_merge(
+    options.symbolize_keys!
+    options.reverse_merge!(
       open_graph_metas: false,
       basic_metas: false,
       slug_url_prefix: nil,
