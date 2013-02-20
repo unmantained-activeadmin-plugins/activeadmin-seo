@@ -61,9 +61,7 @@ and open graph meta title/image fields
 
 == Available Helpers
 
-Still to come :)
-
-  <%= head_metas(@page.seo_meta, default_title: page.title) %>
+  <%= seo_meta_tags(@page.seo_meta, title: page.title) %>
 
 == Globalize3
 
