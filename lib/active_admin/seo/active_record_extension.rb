@@ -44,13 +44,4 @@ private
     reflect_on_all_associations(:belongs_to).first.klass
   end
 
-  #   options = detect_globalize3(self)? {:use => [:slugged, :globalize]} : {:use => [:slugged]}
-  #   model.class_eval do
-  #     extend FriendlyId
-  #     friendly_id args[0], options
-  #     before_validation { |m| m.build_seo_meta if m.seo_meta.nil? ; m.send :set_slug }
-  #     delegate "slug",  :to => :seo_meta, :allow_nil => true
-  #     delegate "slug=", :to => :seo_meta, :allow_nil => true
-  #   end
-  # end
 end
