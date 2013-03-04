@@ -9,7 +9,7 @@ module ActiveAdmin
         ActionView::Base.send :include, ActiveAdmin::Seo::ViewHelpers
       end
 
-      initializer "Railsyard precompile hook" do |app|
+      initializer "Railsyard precompile hook", group: :assets do |app|
         app.config.assets.precompile += ["active_admin/seo.css"]
       end
 
