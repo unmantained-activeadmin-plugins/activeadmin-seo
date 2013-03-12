@@ -7,6 +7,7 @@ require 'friendly_id/translated_seo_meta'
 require 'active_admin/seo/engine'
 require 'active_admin/seo/active_record_extension'
 require 'active_admin/seo/form_builder_extension'
+require 'active_admin/seo/routes'
 
 require 'formtastic/inputs/slug_input'
 

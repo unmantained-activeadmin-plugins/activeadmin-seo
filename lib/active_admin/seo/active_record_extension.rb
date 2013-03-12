@@ -5,6 +5,7 @@ module ActiveAdmin::Seo::ActiveRecordExtension
     options = args.extract_options!
 
     add_seo_meta_relation(self, options[:as])
+    add_url_methods(self) if options[:nested]
 
     if is_globalize3_translation_model?
       translatable_model.send :extend, FriendlyId
@@ -42,6 +43,44 @@ private
 
   def translatable_model
     reflect_on_all_associations(:belongs_to).first.klass
+  end
+
+  def add_url_methods(klass)
+    klass.class_eval do
+      def self.find_by_url(url, locale=I18n.locale)
+        return nil if url.blank?
+        I18n.locale = locale
+        paths = url.sub(/^\//, '').split('/').reverse
+        the_object = nil
+        paths.each_with_index do |slug, i|
+          object = self.find(slug) rescue (return nil)
+          if object.parent
+            parent_slug = (object.parent.seo_meta.slug rescue nil) || (object.parent.translation.seo_meta.slug rescue nil)
+            return nil if parent_slug != paths[i+1]
+          elsif i != (paths.length - 1)
+            return nil
+          end
+          the_object ||= object
+        end
+        the_object
+      end
+
+      def self.find_by_url!(url, locale=I18n.locale)
+        object = self.find_by_url(url, locale)
+        (object)? object : raise(ActiveRecord::RecordNotFound)
+      end
+
+      def url(locale=I18n.locale, object=self, path="")
+        slug = (object.seo_meta.slug rescue nil) || (object.translation_for(locale).seo_meta.slug rescue nil) || ""
+        path = File.join "/", slug, path
+        if object.parent
+          url(locale, object.parent, path)
+        else
+          prefix = self.prefix(locale) rescue "/"
+          File.join prefix, path
+        end
+      end
+    end
   end
 
 end
