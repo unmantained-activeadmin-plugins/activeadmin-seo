@@ -33,6 +33,17 @@ app/admin/page.rb:
     end
   end
 
+== Model options
+
+Default options
+  has_seo_meta :field, tree: false, as: nil
+
+Assign a role for editing Meta:
+  has_seo_meta :field, as: :admin
+
+Adds url helper methods (see Nested Routes Handling below):
+  has_seo_meta :field, nested: true
+
 == Form helper options
 
 Default options
@@ -59,9 +70,35 @@ and open graph meta title/image fields
                       image: true
                     }
 
-== Available Helpers
+
+== View Helpers
 
   <%= seo_meta_tags(@page.seo_meta, title: page.title) %>
+
+
+
+== Nested Routes Handling
+
+Often you need to route objects organized as a tree (eg. a Page
+resource). To simplify the routes management ActiveAdmin Seo provides
+these methods:
+
+app/controllers/pages_controller.rb:
+
+   def show
+     @page = Page.find_by_url params[:url]
+     render text: @page.url # "/path/to/my/page"
+   end
+
+config/routes.rb:
+
+   get "*url" => "pages#show", constraints: ActiveAdmin::Seo::Routes.new(Page)
+
+
+So a request to "/about/page" finds the page with slug "page" and
+parent slug "about", but a request to "/about/non-existent/page"
+renders a 404 error without calling the controller.
+
 
 == Globalize3
 
