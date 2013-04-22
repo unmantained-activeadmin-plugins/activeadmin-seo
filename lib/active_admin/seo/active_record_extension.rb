@@ -8,17 +8,17 @@ module ActiveAdmin::Seo::ActiveRecordExtension
     add_url_methods(self) if options[:nested]
 
     if is_globalize3_translation_model?
-      add_friendly_id(translatable_model, args.first) unless options[:skip_friendly_id]
+      add_friendly_id(translatable_model, args.first, FriendlyId::TranslatedSeoMeta) unless options[:skip_friendly_id]
     else
-      add_friendly_id(self, args.first) unless options[:skip_friendly_id]
+      add_friendly_id(self, args.first, FriendlyId::SeoMeta) unless options[:skip_friendly_id]
     end
   end
 
 private
 
-  def add_friendly_id(model, key)
+  def add_friendly_id(model, key, friendly_id_module)
     model.send :extend, FriendlyId
-    model.friendly_id key, use: FriendlyId::TranslatedSeoMeta
+    model.friendly_id key, use: friendly_id_module
   end
 
   def is_globalize3_translation_model?
