@@ -44,6 +44,9 @@ Assign a role for editing Meta:
 Adds url helper methods (see Nested Routes Handling below):
   has_seo_meta :field, nested: true
 
+Skips friendly_id configuration (just use the seo_meta fields):
+  has_seo_meta skip_friendly_id: true
+
 == Form helper options
 
 Default options
