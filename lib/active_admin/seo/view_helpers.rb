@@ -12,13 +12,13 @@ module ActiveAdmin
         title = seo_metas.map(&:title).find(&:present?)
         buffer << content_tag(:title, title) if title
 
-        %w(description keywords og_title og_type og_url og_description og_site_name).each do |field|
+        %w(description keywords og_title og_type og_url og_description og_site_name og_image).each do |field|
           value = seo_metas.map(&field.to_sym).find(&:present?)
-          buffer << seo_meta_tag(field, value) if value
-        end
-        %w(og_image).each do |field|
-          value = seo_metas.map(&field.to_sym).find(&:present?)
-          buffer << seo_meta_tag(field, value.url) if value
+          if value && value.respond_to?(:url)
+            buffer << seo_meta_tag(field, value.url)
+          elsif value
+            buffer << seo_meta_tag(field, value)
+          end
         end
         buffer.html_safe
       end
