@@ -31,15 +31,17 @@ private
     klass.has_one :seo_meta, :as => :seoable, :class_name => "::ActiveAdmin::Seo::Meta", dependent: :destroy
     klass.accepts_nested_attributes_for :seo_meta, :allow_destroy => true
 
-    if roles
-      klass.attr_accessible :seo_meta_attributes, :as => roles
-      ActiveAdmin::Seo::Meta.class_eval do
-        attr_accessible :title, :slug, :description, :keywords,
-                        :og_title, :og_description, :og_site_name, :og_title, :og_type, :og_url,
-                        :og_image, :retained_og_image, :remove_og_image, :og_image_url, :as => roles
+    unless Rails::VERSION::MAJOR > 3 && !defined? ProtectedAttributes
+      if roles
+        klass.attr_accessible :seo_meta_attributes, :as => roles
+        ActiveAdmin::Seo::Meta.class_eval do
+          attr_accessible :title, :slug, :description, :keywords,
+                          :og_title, :og_description, :og_site_name, :og_title, :og_type, :og_url,
+                          :og_image, :retained_og_image, :remove_og_image, :og_image_url, :as => roles
+        end
+      else
+        klass.attr_accessible :seo_meta_attributes
       end
-    else
-      klass.attr_accessible :seo_meta_attributes
     end
   end
 

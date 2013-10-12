@@ -1,5 +1,8 @@
 source "http://rubygems.org"
 
+gem 'activeadmin', github: 'gregbell/active_admin'
+gem 'friendly_id', github: 'norman/friendly_id'
+
 # Declare your gem's dependencies in activeadmin-seo.gemspec.
 # Bundler will treat runtime dependencies like base dependencies, and
 # development dependencies will be added by default to the :development group.

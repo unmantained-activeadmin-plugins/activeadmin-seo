@@ -40,7 +40,7 @@ module FriendlyId
       model_class.instance_eval do
         friendly_id_config.use :slugged
         friendly_id_config.class.send :include, Configuration
-        relation_class.send :include, FinderMethods
+        relation.class.send :include, FinderMethods
         include Model
       end
     end
@@ -72,7 +72,7 @@ module FriendlyId
         if found
           found.tap { |f| f.translations.reload }
         else
-          find_one_without_friendly_id(id)
+          find(id)
         end
       end
       protected :find_one
