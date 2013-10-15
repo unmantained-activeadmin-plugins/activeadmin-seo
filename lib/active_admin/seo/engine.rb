@@ -9,7 +9,7 @@ module ActiveAdmin
         ActionView::Base.send :include, ActiveAdmin::Seo::ViewHelpers
       end
 
-      initializer "precompile hook", group: :assets do |app|
+      initializer "precompile hook", group: :all do |app|
         app.config.assets.precompile += ["active_admin/seo.css"]
       end
 
