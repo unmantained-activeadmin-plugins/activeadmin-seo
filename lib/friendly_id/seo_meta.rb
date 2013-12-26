@@ -27,7 +27,7 @@ module FriendlyId
         base << "ESCAPE '\\'" if sluggable.connection.adapter_name =~ /sqlite/i
 
         scope = ActiveAdmin::Seo::Meta.where(base, normalized, wildcard)
-        scope = scope.where(seoable_type: sluggable.class.name)
+        scope = scope.where(seoable_type: sluggable.class.base_class.name)
         scope = scope.where("id <> ?", meta_seo.id) unless meta_seo.new_record?
         scope = scope.order("LENGTH(#{column}) DESC, #{column} DESC")
 
