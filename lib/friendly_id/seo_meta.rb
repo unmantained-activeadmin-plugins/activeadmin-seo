@@ -82,4 +82,3 @@ module FriendlyId
 
   end
 end
-
