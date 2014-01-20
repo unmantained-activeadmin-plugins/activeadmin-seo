@@ -13,3 +13,4 @@ require 'formtastic/inputs/slug_input'
 
 ActiveRecord::Base.send :extend, ActiveAdmin::Seo::ActiveRecordExtension
 ActiveAdmin::FormBuilder.send :include, ActiveAdmin::Seo::FormBuilderExtension
+

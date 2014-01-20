@@ -61,3 +61,4 @@ module ActiveAdmin::Seo::FormBuilderExtension
   end
 
 end
+

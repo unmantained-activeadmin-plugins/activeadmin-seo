@@ -4,21 +4,28 @@ module ActiveAdmin::Seo::ActiveRecordExtension
   def has_seo_meta(*args, &block)
     options = args.extract_options!
 
+    target_class = if is_globalize3_translation_model?
+                     translatable_model
+                   else
+                     self
+                   end
+
     add_seo_meta_relation(self, options[:as])
     add_url_methods(self) if options[:nested]
-
-    if is_globalize3_translation_model?
-      add_friendly_id(translatable_model, args.first, FriendlyId::TranslatedSeoMeta) unless options[:skip_friendly_id]
-    else
-      add_friendly_id(self, args.first, FriendlyId::SeoMeta) unless options[:skip_friendly_id]
-    end
+    add_friendly_id(target_class, args.first) unless options[:skip_friendly_id]
   end
 
 private
 
-  def add_friendly_id(model, key, friendly_id_module)
+  def add_friendly_id(model, key)
     model.send :extend, FriendlyId
-    model.friendly_id key, use: friendly_id_module
+
+    friendly_id_extension = if is_globalize3_translation_model?
+                              FriendlyId::TranslatedSeoMeta
+                            else
+                              FriendlyId::SeoMeta
+                            end
+    model.friendly_id key, use: friendly_id_extension
   end
 
   def is_globalize3_translation_model?
@@ -88,3 +95,4 @@ private
   end
 
 end
+
