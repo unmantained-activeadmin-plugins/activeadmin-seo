@@ -1,88 +1,98 @@
-require "friendly_id/slug_generator"
+require 'i18n'
 
 module FriendlyId
   module TranslatedSeoMeta
-
-    class SlugGenerator < FriendlyId::SlugGenerator
-      attr_reader :translation, :meta_seo
-
-      def initialize(sluggable, translation, meta_seo, normalized)
-        super(sluggable, normalized)
-        @translation = translation
-        @meta_seo = meta_seo
+    class << self
+      def setup(model_class)
+        model_class.friendly_id_config.use :slugged, :finders
       end
 
-      private
-
-      def column
-        meta_seo.connection.quote_column_name friendly_id_config.slug_column
+      def included(model_class)
+        advise_against_untranslated_model(model_class)
+        model_class.instance_eval do
+          include Model
+          relation.class.send :include, FinderMethods
+        end
       end
 
-      def last_in_sequence
-        extract_sequence_from_slug(conflict.slug)
+      def advise_against_untranslated_model(model)
+        field = model.friendly_id_config.query_field
+        unless model.respond_to?('translated_attribute_names') ||
+               model.translated_attribute_names.exclude?(field.to_sym)
+          raise "[FriendlyId] You need to translate the '#{field}' field with " \
+            "Globalize (add 'translates :#{field}' in your model '#{model.name}')"
+        end
       end
+      private :advise_against_untranslated_model
+    end
 
-      def conflicts
-        base = "#{column} = ? OR #{column} LIKE ?"
-        # Awful hack for SQLite3, which does not pick up '\' as the escape character without this.
-        base << "ESCAPE '\\'" if sluggable.connection.adapter_name =~ /sqlite/i
-
-        scope = ActiveAdmin::Seo::Meta.where(base, normalized, wildcard)
-        scope = scope.where(seoable_type: translation.class.name)
-        scope = scope.where("id <> ?", meta_seo.id) unless meta_seo.new_record?
-        scope = scope.order("LENGTH(#{column}) DESC, #{column} DESC")
-
-        scope
+    def friendly_id
+      if send(friendly_id_config.query_field) == nil
+        self.globalize_fallbacks(::Globalize.locale).each do |fallback|
+          ::Globalize.with_locale(fallback) { return super if super }
+        end
+        nil
+      else
+        super
       end
     end
 
-    def self.included(model_class)
-      model_class.instance_eval do
-        friendly_id_config.use :slugged
-        friendly_id_config.class.send :include, Configuration
-        relation_class.send :include, FinderMethods
-        include Model
+    def set_friendly_id(text, locale = nil)
+      ::Globalize.with_locale(locale || ::Globalize.locale) do
+        set_slug normalize_friendly_id(text)
+      end
+    end
+
+    def should_generate_new_friendly_id?
+      unless translation.seo_meta
+        translation.build_seo_meta
+        true
+      else
+        translation_for(::Globalize.locale).seo_meta.slug.empty?
+      end
+    end
+
+    def set_slug(normalized_slug = nil)
+      if self.translations.to_a.count > 1
+        self.translations.map(&:locale).each do |locale|
+          ::Globalize.with_locale(locale) { super_set_slug(normalized_slug) }
+        end
+      else
+        ::Globalize.with_locale(::Globalize.locale) { super_set_slug(normalized_slug) }
+      end
+    end
+
+    def super_set_slug(normalized_slug = nil)
+      if should_generate_new_friendly_id?
+        candidates = FriendlyId::Candidates.new(self, normalized_slug || send(friendly_id_config.base))
+        slug = slug_generator.generate(candidates) || resolve_friendly_id_conflict(candidates)
+        translation.seo_meta.slug = slug
       end
     end
 
     module Model
-      def translation_slug
-        translation.try(:seo_meta).try(:slug)
+      def slug=(slug)
+        translation.seo_meta.slug = slug
       end
 
-      def set_slug
-        translations.each do |t|
-          normalized_slug = normalize_friendly_id t.send(friendly_id_config.base)
-          t.build_seo_meta unless t.seo_meta.present?
-          if t.seo_meta.slug.blank?
-            generator = SlugGenerator.new(self, t, t.seo_meta, normalized_slug)
-            t.seo_meta.slug = generator.generate
-          end
-        end
+      def slug
+        translation.seo_meta.slug.presence if translation.seo_meta
       end
-      private :set_slug
     end
+  end
 
-    module FinderMethods
-      def find_one(id)
-        return super if id.unfriendly_id?
-        found = includes(:translations => :seo_meta).
-                where(translation_class.arel_table[:locale].in([I18n.locale, I18n.default_locale])).
-                where(ActiveAdmin::Seo::Meta.arel_table[:slug].eq(id)).first
-        if found
-          found.tap { |f| f.translations.reload }
-        else
-          find_one_without_friendly_id(id)
-        end
-      end
-      protected :find_one
-    end
-
-    module Configuration
-      def query_field
-        :translation_slug
+  module FinderMethods
+    def first_by_friendly_id(id)
+      if self.first.try(:seo_meta)
+        ActiveAdmin::Seo::Meta.where(slug: id, seoable_type: self.first.class.name).first.try(:seoable) if self.first
+      else
+        ActiveAdmin::Seo::Meta.where(slug: id, seoable_type: self.first.translation.class.name).first.try(:seoable).try(:globalized_model) if self.first
       end
     end
 
+    def exists_by_friendly_id?(id)
+      first_by_friendly_id(id)
+    end
   end
 end
+
