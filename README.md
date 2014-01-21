@@ -1,13 +1,14 @@
 # Active Admin Seo
 
 Add friendly_id and SEO meta fields to your ActiveAdmin resources.
+This version is compatible with ActiveAdmin 0.6.x, for the upcoming 1.0 see [master branch](//github.com/nebirhos/activeadmin-seo/tree/master).
 
 
 ## Installation
 
 Gemfile:
 ```ruby
-gem 'activeadmin-seo', github: 'nebirhos/activeadmin-seo'
+gem 'activeadmin-seo', github: 'nebirhos/activeadmin-seo', branch: '0-6-stable'
 gem "activeadmin-dragonfly", github: "stefanoverna/activeadmin-dragonfly"
 ```
 

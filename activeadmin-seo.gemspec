@@ -12,11 +12,10 @@ Gem::Specification.new do |s|
   s.homepage    = "https://github.com/nebirhos/activeadmin-seo"
   s.summary     = "SEO meta fields for ActiveAdmin resources."
   s.require_paths = ['lib']
-  # s.description = "TODO: Description of ActiveadminSeo."
 
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.md"]
 
-  s.add_dependency "activeadmin"
+  s.add_dependency "activeadmin", "~> 0.6.2"
   s.add_dependency 'activeadmin-dragonfly'
   s.add_dependency "friendly_id", "~> 4.0.0"
 end
