@@ -85,8 +85,10 @@ module FriendlyId
     def first_by_friendly_id(id)
       if self.first.try(:seo_meta)
         ActiveAdmin::Seo::Meta.where(slug: id, seoable_type: self.first.class.name).first.try(:seoable) if self.first
-      else
+      elsif self.first.try(:translation)
         ActiveAdmin::Seo::Meta.where(slug: id, seoable_type: self.first.translation.class.name).first.try(:seoable).try(:globalized_model) if self.first
+      else
+        self.first.class.name.constantize.where(slug: id).first if self.first
       end
     end
 
