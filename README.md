@@ -3,6 +3,10 @@
 Add friendly_id and SEO meta fields to your ActiveAdmin resources.
 This version is compatible with ActiveAdmin 1.0.x, for the old 0.6.x release see [0-6-stable branch](//github.com/nebirhos/activeadmin-seo/tree/0-6-stable).
 
+### :warning: Unmaintained :warning:
+
+Sorry, but I no longer work on ActiveAdmin often enough to justify mantaining this gem. Take it as it is. If you are interested to update and maintain the gem, please let me know! :heart:
+
 
 ## Installation
 
